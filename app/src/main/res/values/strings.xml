@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PayMind</string>
+
+    <!-- Для навигации -->
+    <string name="home_title">Главная</string>
+    <string name="services_title">Услуги</string>
+    <string name="subscriptions_title">Подписки</string>
+    <string name="settings_title">Настройки</string>
+
+    <!-- Для контента -->
+    <string name="upcoming_payments">Предстоящие платежи</string>
+    <string name="total_amount">Общая сумма:</string>
+    <string name="total_sum">1 378 ₽</string>
+    <string name="reminders_count">3 напоминания</string>
+    <string name="all_payments">Все платежи</string>
+
+    <!-- Платежи -->
+    <string name="electricity">Электричество</string>
+    <string name="electricity_desc">Хол/га • Ожидает</string>
+    <string name="electricity_date">25 ноября</string>
+    <string name="electricity_amount">678 ₽</string>
+
+    <string name="yandex_music">Яндекс музыка</string>
+    <string name="yandex_music_desc">Подписка • Ожидает</string>
+    <string name="yandex_music_date">29 ноября</string>
+    <string name="yandex_music_amount">350 ₽</string>
+
+    <string name="vk_play">ВК ПЛЭЙ</string>
+    <string name="vk_play_desc">Подписка • Оплачено</string>
+    <string name="vk_play_date">29 ноября</string>
+    <string name="vk_play_amount">350 ₽</string>
+</resources>
