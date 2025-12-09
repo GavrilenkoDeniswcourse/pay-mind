@@ -1,20 +1,430 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ServicesFragment">
+    android:fillViewport="true">
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Текст блока 2"
-        android:textSize="16sp"
-        android:textColor="#000000"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />/>
+        android:padding="16dp"
+        tools:context=".SettingsFragment">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <!-- Заголовок приложения -->
+        <TextView
+            android:id="@+id/app_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PayMind"
+            android:textSize="28sp"
+            android:textColor="#1F2937"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/app_footer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="35dp"
+            android:text="Коммунальные услуги"
+            android:textSize="20sp"
+            android:textColor="#666666"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/app_title"/>
+
+
+
+
+        <!-- Карточка "Предстоящие платежи" -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/upcoming_card"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="#9F00D4"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="2dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/app_footer">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="20dp">
+
+
+                <!-- Заголовок карточки -->
+                <TextView
+                    android:id="@+id/upcoming_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Предстоящие платежи"
+                    android:textSize="18sp"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <!-- Подпись под суммой -->
+                <TextView
+                    android:id="@+id/total_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="Общая сумма:"
+                    android:textSize="14sp"
+                    android:textColor="#FFFFFF"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/upcoming_title" />
+
+                <!-- Общая сумма -->
+                <TextView
+                    android:id="@+id/total_amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="1 378 ₽"
+                    android:textSize="32sp"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/total_label" />
+
+
+                <View
+                    android:id="@+id/divider"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="#FFFFFF"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/total_amount"
+                    app:layout_constraintBottom_toTopOf="@id/reminder_icon"/>
+
+                <!-- Иконка напоминаний (ПЕРЕД ТЕКСТОМ) -->
+                <ImageView
+                    android:id="@+id/reminder_icon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/calendar"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:tint="#FFFFFF"/>
+
+                <!-- Количество напоминаний -->
+                <TextView
+                    android:id="@+id/reminders_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2 напоминания"
+                    android:textSize="16sp"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginStart="8dp"
+                    app:layout_constraintStart_toEndOf="@id/reminder_icon"
+                    app:layout_constraintTop_toTopOf="@id/reminder_icon"
+                    app:layout_constraintBottom_toBottomOf="@id/reminder_icon" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Заголовок "Все платежи" -->
+        <TextView
+            android:id="@+id/all_payments_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Все платежи"
+            android:textSize="20sp"
+            android:textColor="#1F2937"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/upcoming_card" />
+
+        <!-- Список платежей -->
+        <LinearLayout
+            android:id="@+id/payments_list"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/all_payments_title">
+
+            <!-- Платеж 1: Электричество -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/payment_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="8dp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <!-- Первая строка: Название услуги и статус -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="5dp">
+
+                        <!-- Название услуги -->
+                        <TextView
+                            android:id="@+id/tvServiceName1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Электричество"
+                            android:textColor="#000000"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <!-- Статус -->
+                        <TextView
+                            android:id="@+id/tvStatus1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Ожидает"
+                            android:textColor="#F93D3D"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:background="@drawable/status_background_orange"
+                            android:paddingHorizontal="12dp"
+                            android:paddingVertical="6dp" />
+
+                    </LinearLayout>
+
+                    <!-- Вторая строка: Сумма и срок -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="4dp">
+
+                        <!-- Сумма -->
+                        <TextView
+                            android:id="@+id/tvAmountLabel1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Сумма: 678 ₽"
+                            android:textColor="#666666"
+                            android:textSize="16sp"
+                             />
+
+                        <!-- Срок -->
+                        <TextView
+                            android:id="@+id/tvDueDate1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="До 25 числа"
+                            android:textColor="#666666"
+                            android:textSize="14sp" />
+
+                    </LinearLayout>
+
+                    <!-- Третья строка: Последний платеж -->
+                    <TextView
+                        android:id="@+id/tvLastPayment1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Последний платеж: 25 октября"
+                        android:textColor="#666666"
+                        android:textSize="14sp"
+                        android:layout_marginBottom="16dp" />
+
+                    <!-- Четвертая строка: Кнопки справа -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="end">
+
+                        <!-- Кнопка Оплатить -->
+                        <Button
+                            android:id="@+id/btnPay1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:minWidth="100dp"
+
+                            android:text="Оплатить"
+                            android:textColor="#FFFFFF"
+                            android:background="@drawable/button_pay_background"
+                            android:paddingHorizontal="16dp"
+                            android:paddingVertical="10dp"
+                            android:textSize="14sp"
+                            app:backgroundTint="@null"/>
+
+                        <!-- Кнопка Удалить -->
+                        <Button
+                            android:id="@+id/btnDelete1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:minWidth="100dp"
+                            android:text="Удалить"
+                            android:textColor="#000000"
+                            android:background="@drawable/button_delete_background"
+                            android:paddingHorizontal="16dp"
+                            android:paddingVertical="10dp"
+                            android:textSize="14sp"
+                            android:layout_marginStart="12dp"
+                            app:backgroundTint="@null"/>
+
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+            </androidx.cardview.widget.CardView>
+
+
+
+            <!-- Платеж 2: Яндекс музыка -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/payment_card_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="8dp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <!-- Первая строка: Название услуги и статус -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="5dp">
+
+                        <!-- Название услуги -->
+                        <TextView
+                            android:id="@+id/tvServiceName2"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Электричество"
+                            android:textColor="#000000"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <!-- Статус -->
+                        <TextView
+                            android:id="@+id/tvStatus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Оплачено"
+                            android:textColor="#1DBA34"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:background="@drawable/status_background_green"
+                            android:paddingHorizontal="16dp"
+                            android:paddingVertical="8dp" />
+
+                    </LinearLayout>
+
+                    <!-- Вторая строка: Сумма и срок -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="4dp">
+
+                        <!-- Сумма -->
+                        <TextView
+                            android:id="@+id/tvAmountLabel2"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Сумма: 678 ₽"
+                            android:textColor="#666666"
+                            android:textSize="16sp"
+                            />
+
+                        <!-- Срок -->
+                        <TextView
+                            android:id="@+id/tvDueDate2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="До 25 числа"
+                            android:textColor="#666666"
+                            android:textSize="14sp" />
+
+                    </LinearLayout>
+
+                    <!-- Третья строка: Последний платеж -->
+                    <TextView
+                        android:id="@+id/tvLastPayment2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Последний платеж: 25 октября"
+                        android:textColor="#666666"
+                        android:textSize="14sp"
+                        android:layout_marginBottom="16dp" />
+
+                    <!-- Четвертая строка: Кнопки справа -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:gravity="end">
+
+
+                        <!-- Кнопка Удалить -->
+                        <Button
+                            android:id="@+id/btnDelete2"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:text="Удалить"
+                            android:textColor="#000000"
+                            android:background="@drawable/button_delete_background"
+                            android:paddingHorizontal="16dp"
+                            android:textSize="14sp"
+                            android:layout_marginStart="12dp"
+                            app:backgroundTint="@null"/>
+
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+            </androidx.cardview.widget.CardView>
+
+
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
