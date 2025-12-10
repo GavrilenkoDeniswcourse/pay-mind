@@ -170,6 +170,7 @@
                 android:layout_marginEnd="4dp"
                 android:layout_marginBottom="16dp"
                 android:layout_marginTop="8dp"
+
                 app:cardBackgroundColor="#FFFFFF"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="1dp">
@@ -178,6 +179,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
+                    android:background="@drawable/border"
                     android:padding="16dp">
 
                     <!-- Первая строка: Название услуги и статус -->
@@ -317,6 +319,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
+                    android:background="@drawable/border"
                     android:padding="16dp">
 
                     <!-- Первая строка: Название услуги и статус -->
