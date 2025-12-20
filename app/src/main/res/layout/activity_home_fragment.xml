@@ -56,7 +56,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            app:cardBackgroundColor="#FFFFFF"
+            app:cardBackgroundColor="#203EFF"
             app:cardCornerRadius="12dp"
             app:cardElevation="2dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -68,6 +68,7 @@
                 android:layout_height="wrap_content"
                 android:padding="20dp">
 
+
                 <!-- Заголовок карточки -->
                 <TextView
                     android:id="@+id/upcoming_title"
@@ -75,34 +76,36 @@
                     android:layout_height="wrap_content"
                     android:text="Предстоящие платежи"
                     android:textSize="18sp"
-                    android:textColor="#1F2937"
+                    android:textColor="#FFFFFF"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-
-                <!-- Общая сумма -->
-                <TextView
-                    android:id="@+id/total_amount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:text="1 378 ₽"
-                    android:textSize="32sp"
-                    android:textColor="#7C3AED"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/upcoming_title" />
 
                 <!-- Подпись под суммой -->
                 <TextView
                     android:id="@+id/total_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
                     android:text="Общая сумма:"
                     android:textSize="14sp"
-                    android:textColor="#6B7280"
+                    android:textColor="#FFFFFF"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/total_amount" />
+                    app:layout_constraintTop_toBottomOf="@id/upcoming_title" />
+
+                <!-- Общая сумма -->
+                <TextView
+                    android:id="@+id/total_amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="1 378 ₽"
+                    android:textSize="32sp"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/total_label" />
+
 
                 <View
                     android:id="@+id/divider"
@@ -110,10 +113,11 @@
                     android:layout_height="1dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="16dp"
-                    android:background="#E5E7EB"
+                    android:background="#FFFFFF"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/total_label" />
+                    app:layout_constraintTop_toBottomOf="@id/total_amount"
+                    app:layout_constraintBottom_toTopOf="@id/reminder_icon"/>
 
                 <!-- Иконка напоминаний (ПЕРЕД ТЕКСТОМ) -->
                 <ImageView
@@ -122,7 +126,9 @@
                     android:layout_height="24dp"
                     android:src="@drawable/calendar"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/divider" />
+                    app:layout_constraintTop_toBottomOf="@id/divider"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:tint="#FFFFFF"/>
 
                 <!-- Количество напоминаний -->
                 <TextView
@@ -131,7 +137,7 @@
                     android:layout_height="wrap_content"
                     android:text="3 напоминания"
                     android:textSize="16sp"
-                    android:textColor="#1F2937"
+                    android:textColor="#FFFFFF"
                     android:layout_marginStart="8dp"
                     app:layout_constraintStart_toEndOf="@id/reminder_icon"
                     app:layout_constraintTop_toTopOf="@id/reminder_icon"
@@ -180,16 +186,17 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:orientation="vertical"
+                    android:background="@drawable/border"
                     android:padding="16dp">
 
                     <!-- Первая строка: Название услуги и статус -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="16dp">
+                        android:layout_marginBottom="16dp"
+                        android:orientation="horizontal">
 
                         <!-- Левая часть: название и тип услуги -->
                         <LinearLayout
@@ -199,7 +206,7 @@
                             android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/tvServiceName"
+                                android:id="@+id/tvServiceName1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Электричество"
@@ -208,59 +215,59 @@
                                 android:textStyle="bold" />
 
                             <TextView
-                                android:id="@+id/tvServiceType"
+                                android:id="@+id/tvServiceType1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
                                 android:text="Услуга"
                                 android:textColor="#666666"
-                                android:textSize="14sp"
-                                android:layout_marginTop="4dp" />
+                                android:textSize="14sp" />
 
                         </LinearLayout>
 
                         <!-- Правая часть: статус -->
                         <TextView
-                            android:id="@+id/tvStatus"
+                            android:id="@+id/tvStatus1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Ожидает"
-                            android:textColor="#FF9800"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:background="@drawable/status_background"
+                            android:background="@drawable/status_background_orange"
                             android:paddingHorizontal="16dp"
-                            android:paddingVertical="8dp" />
+                            android:paddingVertical="8dp"
+                            android:text="Ожидает"
+                            android:textColor="#F93D3D"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
 
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical">
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
                         <!-- Иконка календаря -->
                         <ImageView
-                            android:id="@+id/ivCalendar"
+                            android:id="@+id/ivCalendar1"
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:src="@drawable/calendar"
                             android:layout_marginEnd="12dp"
+                            android:src="@drawable/calendar"
                             app:tint="#666666" />
 
                         <!-- Дата -->
                         <TextView
-                            android:id="@+id/tvDate"
+                            android:id="@+id/tvDate1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginEnd="12dp"
                             android:text="25 ноября"
                             android:textColor="#666666"
-                            android:textSize="16sp"
-                            android:layout_marginEnd="12dp" />
+                            android:textSize="16sp" />
 
                         <!-- Сумма -->
                         <TextView
-                            android:id="@+id/tvAmount"
+                            android:id="@+id/tvAmount1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="678 ₽"
@@ -286,68 +293,100 @@
                 app:cardCornerRadius="8dp"
                 app:cardElevation="1dp">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@drawable/border"
                     android:padding="16dp">
 
-                    <ImageView
-                        android:id="@+id/icon_2"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:src="@drawable/calendar"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/title_2"
-                        android:layout_width="0dp"
+                    <!-- Первая строка: Название услуги и статус -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:text="Яндекс музыка"
-                        android:textColor="#1F2937"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toStartOf="@id/amount_2"
-                        app:layout_constraintStart_toEndOf="@id/icon_2"
-                        app:layout_constraintTop_toTopOf="@id/icon_2" />
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="16dp">
 
-                    <TextView
-                        android:id="@+id/description_2"
-                        android:layout_width="0dp"
+                        <!-- Левая часть: название и тип услуги -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvServiceName2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Яндекс музыка"
+                                android:textColor="#000000"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvServiceType2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Подписка"
+                                android:textColor="#666666"
+                                android:textSize="14sp"
+                                android:layout_marginTop="4dp" />
+
+                        </LinearLayout>
+
+                        <!-- Правая часть: статус -->
+                        <TextView
+                            android:id="@+id/tvStatus2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Ожидает"
+                            android:textColor="#F93D3D"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:background="@drawable/status_background_orange"
+                            android:paddingHorizontal="16dp"
+                            android:paddingVertical="8dp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="Подписка • Ожидает"
-                        android:textColor="#6B7280"
-                        android:textSize="14sp"
-                        app:layout_constraintEnd_toStartOf="@id/date_2"
-                        app:layout_constraintStart_toStartOf="@id/title_2"
-                        app:layout_constraintTop_toBottomOf="@id/title_2" />
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
 
-                    <TextView
-                        android:id="@+id/date_2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="29 ноября"
-                        android:textColor="#6B7280"
-                        android:textSize="12sp"
-                        app:layout_constraintBottom_toBottomOf="@id/description_2"
-                        app:layout_constraintEnd_toStartOf="@id/amount_2"
-                        app:layout_constraintTop_toBottomOf="@id/title_2" />
+                        <!-- Иконка календаря -->
+                        <ImageView
+                            android:id="@+id/ivCalendar2"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/calendar"
+                            android:layout_marginEnd="12dp"
+                            app:tint="#666666" />
 
-                    <TextView
-                        android:id="@+id/amount_2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="350 ₽"
-                        android:textColor="#1F2937"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="@id/icon_2"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/icon_2" />
+                        <!-- Дата -->
+                        <TextView
+                            android:id="@+id/tvDate2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="12 ноября"
+                            android:textColor="#666666"
+                            android:textSize="16sp"
+                            android:layout_marginEnd="12dp" />
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                        <!-- Сумма -->
+                        <TextView
+                            android:id="@+id/tvAmount2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="350 ₽"
+                            android:textColor="#000000"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
 
             </androidx.cardview.widget.CardView>
 
@@ -363,68 +402,100 @@
                 app:cardCornerRadius="8dp"
                 app:cardElevation="1dp">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@drawable/border"
                     android:padding="16dp">
 
-                    <ImageView
-                        android:id="@+id/icon_3"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:src="@drawable/calendar"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/title_3"
-                        android:layout_width="0dp"
+                    <!-- Первая строка: Название услуги и статус -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:text="ВК ПЛЭЙ"
-                        android:textColor="#1F2937"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toStartOf="@id/amount_3"
-                        app:layout_constraintStart_toEndOf="@id/icon_3"
-                        app:layout_constraintTop_toTopOf="@id/icon_3" />
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="16dp">
 
-                    <TextView
-                        android:id="@+id/description_3"
-                        android:layout_width="0dp"
+                        <!-- Левая часть: название и тип услуги -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvServiceName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="VKPlay"
+                                android:textColor="#000000"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvServiceType"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Подписка"
+                                android:textColor="#666666"
+                                android:textSize="14sp"
+                                android:layout_marginTop="4dp" />
+
+                        </LinearLayout>
+
+                        <!-- Правая часть: статус -->
+                        <TextView
+                            android:id="@+id/tvStatus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Оплачено"
+                            android:textColor="#1DBA34"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:background="@drawable/status_background_green"
+                            android:paddingHorizontal="16dp"
+                            android:paddingVertical="8dp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="Подписка • Оплачено"
-                        android:textColor="#6B7280"
-                        android:textSize="14sp"
-                        app:layout_constraintEnd_toStartOf="@id/date_3"
-                        app:layout_constraintStart_toStartOf="@id/title_3"
-                        app:layout_constraintTop_toBottomOf="@id/title_3" />
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
 
-                    <TextView
-                        android:id="@+id/date_3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="29 ноября"
-                        android:textColor="#6B7280"
-                        android:textSize="12sp"
-                        app:layout_constraintBottom_toBottomOf="@id/description_3"
-                        app:layout_constraintEnd_toStartOf="@id/amount_3"
-                        app:layout_constraintTop_toBottomOf="@id/title_3" />
+                        <!-- Иконка календаря -->
+                        <ImageView
+                            android:id="@+id/ivCalendar"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/calendar"
+                            android:layout_marginEnd="12dp"
+                            app:tint="#666666" />
 
-                    <TextView
-                        android:id="@+id/amount_3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="350 ₽"
-                        android:textColor="#1F2937"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="@id/icon_3"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/icon_3" />
+                        <!-- Дата -->
+                        <TextView
+                            android:id="@+id/tvDate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="11 декабря"
+                            android:textColor="#666666"
+                            android:textSize="16sp"
+                            android:layout_marginEnd="12dp" />
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                        <!-- Сумма -->
+                        <TextView
+                            android:id="@+id/tvAmount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="300 ₽"
+                            android:textColor="#000000"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
 
             </androidx.cardview.widget.CardView>
 
