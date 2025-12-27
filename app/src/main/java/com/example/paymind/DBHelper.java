@@ -84,7 +84,6 @@ public class DBHelper extends SQLiteOpenHelper {
         cursor.moveToFirst();
         int count = cursor.getInt(0);
         cursor.close();
-        Log.d("count", "ew" + count);
         if (count == 0) {
             Log.d("DBHelper", "БД пустая, запускаем сидеры...");
             SubscriptionTypeSeeder subscriptionTypeSeeder = new SubscriptionTypeSeeder(db);
