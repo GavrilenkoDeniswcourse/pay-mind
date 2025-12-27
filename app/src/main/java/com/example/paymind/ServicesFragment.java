@@ -41,7 +41,7 @@ public class ServicesFragment extends Fragment {
         dbHelper = new DBHelper(getContext());
         subscriptionRepository = new SubscriptionRepository(dbHelper);
 
-        List<Subscription> subscriptions = subscriptionRepository.getSubscriptionsByCategory(CategoryType.SUBSCRIPTION.getId());
+        List<Subscription> subscriptions = subscriptionRepository.getSubscriptionsByCategory(CategoryType.SERVICE.getId());
         int totalAmount = 0;
         int remindersCount = subscriptions.size();
 
