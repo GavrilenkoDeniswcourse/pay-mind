@@ -34,7 +34,6 @@ public class Subscription {
     private String periodTypeName;
     private String typeName;
 
-    // Конструкторы
     public Subscription() {
     }
 
@@ -61,7 +60,6 @@ public class Subscription {
         this.updatedAt = updatedAt;
     }
 
-    // Геттеры и сеттеры
     public int getId() {
         return id;
     }
@@ -198,7 +196,6 @@ public class Subscription {
         this.typeName = typeName;
     }
 
-    // Дополнительные геттеры и сеттеры
     public String getCategoryName() {
         return this.getCategory().getName();
     }
@@ -404,7 +401,6 @@ public class Subscription {
         }
     }
 
-    // Методы для правильного склонения
     private String getDayPlural(int value) {
         int lastDigit = value % 10;
         int lastTwoDigits = value % 100;

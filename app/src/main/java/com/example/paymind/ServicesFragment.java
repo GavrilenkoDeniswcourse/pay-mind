@@ -3,20 +3,29 @@ package com.example.paymind;
 import static android.view.View.VISIBLE;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.paymind.enums.CategoryType;
 import com.example.paymind.models.Subscription;
 import com.example.paymind.repositories.SubscriptionRepository;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
@@ -27,24 +36,56 @@ public class ServicesFragment extends Fragment {
     private LinearLayout paymentsList;
     private TextView totalAmountView;
     private TextView remindersCountView;
+    private FloatingActionButton fabAddSubscription;
+    private ActivityResultLauncher<Intent> addSubscriptionLauncher;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        dbHelper = new DBHelper(getContext());
+        subscriptionRepository = new SubscriptionRepository(dbHelper);
+
+        addSubscriptionLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == AppCompatActivity.RESULT_OK) {
+                        refreshSubscriptionsList();
+                    }
+                }
+        );
+    }
+
+    @SuppressLint("DefaultLocale")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Загружаем layout для страницы услуг
         View view = inflater.inflate(R.layout.activity_services, container, false);
 
         paymentsList = view.findViewById(R.id.payments_list);
         totalAmountView = view.findViewById(R.id.total_amount);
         remindersCountView = view.findViewById(R.id.reminders_count);
+        fabAddSubscription = view.findViewById(R.id.fabAddSubscription);
 
-        dbHelper = new DBHelper(getContext());
-        subscriptionRepository = new SubscriptionRepository(dbHelper);
+        refreshSubscriptionsList();
+
+        fabAddSubscription.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), AddSubscriptionActivity.class);
+            intent.putExtra("category_id", CategoryType.SERVICE.getId());
+            addSubscriptionLauncher.launch(intent);
+        });
+
+        return view;
+    }
+
+    @SuppressLint("DefaultLocale")
+    private void refreshSubscriptionsList() {
+        paymentsList.removeAllViews();
 
         List<Subscription> subscriptions = subscriptionRepository.getSubscriptionsByCategory(CategoryType.SERVICE.getId());
+        Log.d("subs", subscriptions.toString());
         int totalAmount = 0;
         int remindersCount = subscriptions.size();
-
         for (int i = 0; i < remindersCount; i++) {
             Subscription subscription = subscriptions.get(i);
 
@@ -56,17 +97,13 @@ public class ServicesFragment extends Fragment {
 
         totalAmountView.setText(String.format("%d ₽", totalAmount));
         remindersCountView.setText(getRemindersText(remindersCount));
-
-        return view;
     }
 
     @SuppressLint("DefaultLocale")
     private View createSubscriptionCard(Subscription subscription) {
-        // Загружаем шаблон карточки (нужно создать item_subscription_card_detailed.xml)
         View cardView = LayoutInflater.from(getContext())
                 .inflate(R.layout.item_subscription_detailed_card, paymentsList, false);
 
-        // Находим элементы в карточке
         TextView tvServiceName = cardView.findViewById(R.id.tvServiceName);
         TextView tvCategory = cardView.findViewById(R.id.tvCategory);
         TextView tvStatus = cardView.findViewById(R.id.tvStatus);
@@ -75,7 +112,6 @@ public class ServicesFragment extends Fragment {
         Button btnPay = cardView.findViewById(R.id.btnPay);
         Button btnDelete = cardView.findViewById(R.id.btnDelete);
 
-        // Заполняем данные
         tvServiceName.setText(subscription.getName());
 
         String currencySymbol = subscription.getCurrencySymbol();
@@ -83,17 +119,14 @@ public class ServicesFragment extends Fragment {
             currencySymbol = "₽";
         }
 
-        // Категория (можно получить из subscription.getCategoryName())
         tvCategory.setText((String.format("Сумма: %.0f %s",
                 subscription.getCost(),
                 currencySymbol
         )));
 
-        // Статус
         String statusText = subscription.getDisplayStatus();
         tvStatus.setText(statusText);
 
-        // Цвет статуса
         if (subscription.isPending()) {
             tvStatus.setBackgroundResource(R.drawable.status_background_orange);
             tvStatus.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.holo_red_dark));
@@ -103,9 +136,6 @@ public class ServicesFragment extends Fragment {
             tvStatus.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.holo_blue_dark));
             btnPay.setVisibility(View.GONE);
         }
-
-        // Сумма с символом валюты
-
 
         tvAmount.setText(subscription.getDueDateText());
 
@@ -121,13 +151,30 @@ public class ServicesFragment extends Fragment {
             btnPay.setVisibility(View.VISIBLE);
         }
 
-        // Обработчики кнопок
         btnPay.setOnClickListener(v -> {
-//            onPayButtonClick(subscription);
         });
 
         btnDelete.setOnClickListener(v -> {
-//            onDeleteButtonClick(subscription);
+            new AlertDialog.Builder(requireContext())
+                    .setTitle("Удаление услуги")
+                    .setMessage("Вы уверены, что хотите удалить услугу \"" +
+                            subscription.getName() + "\"?")
+                    .setPositiveButton("Удалить", (dialog, which) -> {
+                        boolean success = subscriptionRepository.deleteSubscription(subscription.getId());
+                        if (success) {
+                            Toast.makeText(getContext(),
+                                    "Услуга удалена",
+                                    Toast.LENGTH_SHORT).show();
+
+                            refreshSubscriptionsList();
+                        } else {
+                            Toast.makeText(getContext(),
+                                    "Ошибка при удалении",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .setNegativeButton("Отмена", null)
+                    .show();
         });
 
         return cardView;

@@ -60,25 +60,21 @@ public class SubscriptionSeeder {
                         PeriodType.MONTH.getId(), 1, 1, "Семейный план",
                         StatusType.WAIT.getId(), 5, musicId},
 
-                // YouTube Premium - ежемесячная подписка
                 {"YouTube Premium", CategoryType.SUBSCRIPTION.getId(), 299.0, CurrencyType.RUB.getId(),
                         today - (7 * 24 * 60 * 60), today + (23 * 24 * 60 * 60),
                         PeriodType.MONTH.getId(), 1, 1, "Индивидуальная",
                         StatusType.WAIT.getId(), 7, videoId},
 
-                // PlayStation Plus - годовая подписка
                 {"PlayStation Plus", CategoryType.SUBSCRIPTION.getId(), 3999.0, CurrencyType.RUB.getId(),
                         today - (90 * 24 * 60 * 60), today + (275 * 24 * 60 * 60),
                         PeriodType.YEAR.getId(), 1, 1, "Extra уровень",
                         StatusType.WAIT.getId(), 15, gamesId},
 
-                // Apple Music - ежемесячная подписка
                 {"Apple Music", CategoryType.SUBSCRIPTION.getId(), 169.0, CurrencyType.RUB.getId(),
                         today - (45 * 24 * 60 * 60), today + (15 * 24 * 60 * 60),
                         PeriodType.MONTH.getId(), 1, 1, "Студенческая",
                         StatusType.WAIT.getId(), 3, musicId},
 
-//                // Яндекс Плюс - ежемесячная подписка
 //                {"Яндекс Плюс", CategoryType.SUBSCRIPTION.getId(), 299.0, CurrencyType.RUB.getId(),
 //                        today - (10 * 24 * 60 * 60), today + (20 * 24 * 60 * 60),
 //                        PeriodType.MONTH.getId(), 1, 1, "С музыкой и кинопоиском",
@@ -90,7 +86,6 @@ public class SubscriptionSeeder {
             for (Object[] sub : subscriptions) {
                 ContentValues values = new ContentValues();
 
-                // Обязательные поля
                 values.put("name", (String) sub[0]);
                 values.put("category_id", (Integer) sub[1]);
                 values.put("cost", (Double) sub[2]);
@@ -105,7 +100,6 @@ public class SubscriptionSeeder {
                 values.put("reminder_days_before", (Integer) sub[11]);
                 values.put("type_id", (Integer) sub[12]);
 
-                // Timestamps
                 values.put("created_at", currentTime);
                 values.put("updated_at", currentTime);
 

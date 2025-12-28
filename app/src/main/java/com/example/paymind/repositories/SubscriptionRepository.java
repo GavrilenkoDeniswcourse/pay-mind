@@ -1,5 +1,6 @@
 package com.example.paymind.repositories;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -21,7 +22,6 @@ public class SubscriptionRepository {
         this.dbHelper = dbHelper;
     }
 
-    // Получить все подписки
     public List<Subscription> getAllSubscriptions() {
         List<Subscription> subscriptions = new ArrayList<>();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -73,7 +73,7 @@ public class SubscriptionRepository {
         List<Subscription> subscriptions = new ArrayList<>();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-        String query = "SELECT *,subscription_types.name as type_name FROM subscriptions JOIN subscription_types ON subscriptions.type_id = subscription_types.id WHERE category_id = ? ORDER BY renewal_date ASC";
+        String query = "SELECT *,subscription_types.name as type_name FROM subscriptions LEFT JOIN subscription_types ON subscriptions.type_id = subscription_types.id WHERE category_id = ? ORDER BY renewal_date ASC";
 
         Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(categoryId)});
 
@@ -105,9 +105,10 @@ public class SubscriptionRepository {
                 subscription.setStatusName(StatusType.fromId(statusId).getName());
                 subscription.setCurrencySymbol(CurrencyType.fromId(currencyId).getSymbol());
                 subscription.setPeriodTypeName(PeriodType.fromId(periodTypeId).getName());
-
-                subscription.setTypeName(cursor.getString(17));
-                Log.d("DB_DEBUG", subscription.getTypeName());
+                if (cursor.getString(17) != null ) {
+                    subscription.setTypeName(cursor.getString(17));
+                }
+                Log.d("DB_DEBUG", subscription.getId() + " ");
                 subscriptions.add(subscription);
             } while (cursor.moveToNext());
         }
@@ -115,5 +116,52 @@ public class SubscriptionRepository {
         db.close();
 
         return subscriptions;
+    }
+
+    public boolean deleteSubscription(int subscriptionId) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        try {
+            int rowsDeleted = db.delete("subscriptions", "id = ?",
+                    new String[]{String.valueOf(subscriptionId)});
+            Log.d("deletedCount", rowsDeleted + " ");
+            return rowsDeleted > 0;
+        } catch (Exception e) {
+            Log.e("SubscriptionRepository", "Ошибка при удалении подписки", e);
+            return false;
+        } finally {
+            db.close();
+        }
+    }
+
+    public boolean insertSubscription(Subscription subscription) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("name", subscription.getName());
+        values.put("category_id", subscription.getCategoryId());
+        values.put("cost", subscription.getCost());
+        values.put("currency_id", subscription.getCurrencyId());
+        values.put("start_date", subscription.getStartDate());
+        values.put("renewal_date", subscription.getRenewalDate());
+        values.put("period_type_id", subscription.getPeriodTypeId());
+        values.put("period_value", subscription.getPeriodValue());
+        values.put("auto_renew", subscription.isAutoRenew() ? 1 : 0);
+        values.put("notes", subscription.getNotes());
+        values.put("status_id", subscription.getStatusId());
+        values.put("reminder_days_before", subscription.getReminderDaysBefore());
+        values.put("type_id", subscription.getTypeId());
+        values.put("created_at", subscription.getCreatedAt());
+        values.put("updated_at", subscription.getUpdatedAt());
+
+        try {
+            long result = db.insert("subscriptions", null, values);
+            return result != -1;
+        } catch (Exception e) {
+            Log.e("SubscriptionRepository", "Ошибка при добавлении подписки", e);
+            return false;
+        } finally {
+            db.close();
+        }
     }
 }
