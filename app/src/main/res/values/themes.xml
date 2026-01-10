@@ -3,6 +3,28 @@
     <style name="Base.Theme.PayMind" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">#003CD4</item>
+        <item name="colorSecondary">#5669A4</item>
+        <item name="colorTertiary">#03DAC5</item>
+
+        <!-- Surface colors -->
+        <item name="colorSurface">#FFFFFF</item>
+        <item name="colorOnSurface">#000000</item>
+        <item name="colorSurfaceVariant">#F5F5F5</item>
+        <item name="colorOnSurfaceVariant">#666666</item>
+
+        <!-- Background -->
+        <item name="android:colorBackground">#FFFFFF</item>
+
+        <!-- Outline/border color -->
+        <item name="colorOutline">#E5E7EB</item>
+
+        <!-- Card colors -->
+        <item name="colorSurfaceContainer">#FFFFFF</item>
+        <item name="colorSurfaceContainerHigh">#FFFFFF</item>
+
+        <!-- Error color -->
+        <item name="colorError">#F44336</item>
     </style>
 
     <style name="Theme.PayMind" parent="Base.Theme.PayMind" />

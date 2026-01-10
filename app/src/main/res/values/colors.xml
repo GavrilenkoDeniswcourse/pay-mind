@@ -2,4 +2,21 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="primary_dark">#AEC6FF</color>
+    <color name="primary_container_dark">#1D44A8</color>
+    <color name="on_primary_dark">#002C76</color>
+
+    <color name="secondary_dark">#B6C6FF</color>
+    <color name="secondary_container_dark">#3E497B</color>
+    <color name="on_secondary_dark">#273155</color>
+
+    <color name="surface_dark">#1B1B1F</color>
+    <color name="on_surface_dark">#E3E2E6</color>
+    <color name="surface_variant_dark">#45464F</color>
+
+    <!-- Specific app colors -->
+    <color name="card_background_dark">#2D2D35</color>
+    <color name="text_primary_dark">#E5E7EB</color>
+    <color name="text_secondary_dark">#9CA3AF</color>
 </resources>

@@ -26,6 +26,8 @@ import com.example.paymind.models.Subscription;
 import com.example.paymind.repositories.SubscriptionRepository;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -155,6 +157,39 @@ public class SubscriptionsFragment extends Fragment {
         }
 
         btnPay.setOnClickListener(v -> {
+            long now = System.currentTimeMillis();
+            Date nowDate = new Date(now);
+
+            Date nextRenewalDate = subscription.calculateNextPaymentDate(nowDate);
+            long nextRenewalDateMillis = nextRenewalDate.getTime();
+
+            String nextDate = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
+                    .format(new Date(nextRenewalDateMillis));
+
+            new AlertDialog.Builder(requireContext())
+                    .setTitle("Оплата подписки")
+                    .setMessage("Подтвердите оплату подписки:\n\n" +
+                            "Название: " + subscription.getName() + "\n" +
+                            "Сумма: " + subscription.getCost() + " " +
+                            subscription.getCurrencySymbol() + "\n" +
+                            "Следующая оплата: " + nextDate)
+                    .setPositiveButton("Оплатить", (dialog, which) -> {
+                        boolean success = subscriptionRepository.markAsPaid(subscription);
+                        if (success) {
+                            Toast.makeText(getContext(),
+                                    "✓ Подписка оплачена\nСледующая оплата: " + nextDate,
+                                    Toast.LENGTH_LONG).show();
+
+                            refreshSubscriptionsList();
+                        } else {
+                            Toast.makeText(getContext(),
+                                    "✗ Ошибка при оплате подписки",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .setNegativeButton("Отмена", null)
+                    .setIcon(android.R.drawable.ic_dialog_info)
+                    .show();
         });
 
         btnDelete.setOnClickListener(v -> {

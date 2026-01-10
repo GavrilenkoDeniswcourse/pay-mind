@@ -3,5 +3,27 @@
     <style name="Base.Theme.PayMind" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="colorPrimary">#4D7AFF</item>
+        <item name="colorSecondary">#B6C6FF</item>
+        <item name="colorTertiary">#03DAC5</item>
+
+        <!-- Surface colors -->
+        <item name="colorSurface">#121212</item>
+        <item name="colorOnSurface">#FFFFFF</item>
+        <item name="colorSurfaceVariant">#1E1E1E</item>
+        <item name="colorOnSurfaceVariant">#B0B0B0</item>
+
+        <!-- Background -->
+        <item name="android:colorBackground">#121212</item>
+
+        <!-- Outline/border color -->
+        <item name="colorOutline">#374151</item>
+
+        <!-- Card colors -->
+        <item name="colorSurfaceContainer">#1E1E1E</item>
+        <item name="colorSurfaceContainerHigh">#2D2D2D</item>
+
+        <!-- Error color -->
+        <item name="colorError">#CF6679</item>
     </style>
 </resources>

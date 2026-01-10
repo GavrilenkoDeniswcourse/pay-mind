@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:text="PayMind"
             android:textSize="28sp"
-            android:textColor="#1F2937"
+            android:textColor="?attr/colorOnSurface"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:text="Настройки"
             android:textSize="20sp"
-            android:textColor="#666666"
+            android:textColor="?attr/colorOnSurfaceVariant"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/app_title" />
 
@@ -53,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:text="Уведомления"
                 android:textSize="18sp"
-                android:textColor="#666666"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:paddingTop="16dp"
                 android:paddingBottom="8dp" />
 
@@ -63,7 +63,7 @@
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="2dp"
-                app:cardBackgroundColor="#FFFFFF"
+                app:cardBackgroundColor="?attr/colorSurfaceContainer"
                 android:layout_marginBottom="24dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -85,7 +85,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/titleText"
                         app:layout_constraintVertical_bias="0.0"
-                        app:tint="#284D9D" />
+                        app:tint="?attr/colorOnPrimary" />
 
                     <TextView
                         android:id="@+id/titleText"
@@ -93,7 +93,7 @@
                         android:layout_height="wrap_content"
                         android:text="Уведомления"
                         android:textSize="16sp"
-                        android:textColor="#000000"
+                        android:textColor="?attr/colorOnSurface"
                         app:layout_constraintStart_toEndOf="@+id/reminder_icon"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/switch1"
@@ -106,7 +106,7 @@
                         android:layout_height="wrap_content"
                         android:text="Получать напоминания о платежах"
                         android:textSize="12sp"
-                        android:textColor="#666666"
+                        android:textColor="?attr/colorOnSurfaceVariant"
                         app:layout_constraintStart_toStartOf="@+id/titleText"
                         app:layout_constraintTop_toBottomOf="@+id/titleText"
                         app:layout_constraintEnd_toStartOf="@+id/switch1"
@@ -133,7 +133,7 @@
                 android:layout_height="wrap_content"
                 android:text="Внешний вид"
                 android:textSize="18sp"
-                android:textColor="#666666"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:paddingTop="16dp"
                 android:paddingBottom="8dp" />
 
@@ -142,7 +142,7 @@
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="2dp"
-                app:cardBackgroundColor="#FFFFFF"
+                app:cardBackgroundColor="?attr/colorSurfaceContainer"
                 android:layout_marginBottom="24dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -164,7 +164,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/titleText1"
                     app:layout_constraintVertical_bias="0.0"
-                    app:tint="#000000" />
+                    app:tint="?attr/colorOnSurfaceVariant" />
 
                 <TextView
                     android:id="@+id/titleText1"
@@ -172,7 +172,7 @@
                     android:layout_height="wrap_content"
                     android:text="Темная тема"
                     android:textSize="16sp"
-                    android:textColor="#000000"
+                    android:textColor="?attr/colorOnSurface"
                     app:layout_constraintStart_toEndOf="@+id/reminder_icon1"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/switch2"
@@ -185,7 +185,7 @@
                     android:layout_height="wrap_content"
                     android:text="Включить темное оформление"
                     android:textSize="12sp"
-                    android:textColor="#666666"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     app:layout_constraintStart_toStartOf="@+id/titleText1"
                     app:layout_constraintTop_toBottomOf="@+id/titleText1"
                     app:layout_constraintEnd_toStartOf="@+id/switch2"

@@ -13,6 +13,7 @@ import com.example.paymind.enums.StatusType;
 import com.example.paymind.models.Subscription;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class SubscriptionRepository {
@@ -23,6 +24,8 @@ public class SubscriptionRepository {
     }
 
     public List<Subscription> getAllSubscriptions() {
+        checkAndUpdateOverdueSubscriptions();
+
         List<Subscription> subscriptions = new ArrayList<>();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
@@ -70,6 +73,8 @@ public class SubscriptionRepository {
     }
 
     public List<Subscription> getSubscriptionsByCategory(int categoryId) {
+        checkAndUpdateOverdueSubscriptions();
+
         List<Subscription> subscriptions = new ArrayList<>();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
@@ -160,6 +165,67 @@ public class SubscriptionRepository {
         } catch (Exception e) {
             Log.e("SubscriptionRepository", "Ошибка при добавлении подписки", e);
             return false;
+        } finally {
+            db.close();
+        }
+    }
+
+    public boolean markAsPaid(Subscription subscription) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        try {
+            if (subscription == null) {
+                return false;
+            }
+
+            ContentValues values = new ContentValues();
+            values.put("status_id", StatusType.PAID.getId());
+
+            long now = System.currentTimeMillis();
+            Date nowDate = new Date(now);
+            Date nextRenewalDate = subscription.calculateNextPaymentDate(nowDate);
+
+            long nextRenewalDateMillis = nextRenewalDate.getTime() / 1000;
+
+            values.put("renewal_date", nextRenewalDateMillis);
+
+            values.put("start_date", now);
+
+            values.put("updated_at", System.currentTimeMillis());
+
+            int rowsUpdated = db.update("subscriptions", values,
+                    "id = ?", new String[]{String.valueOf(subscription.getId())});
+
+            return rowsUpdated > 0;
+
+        } catch (Exception e) {
+            Log.e("SubscriptionRepository", "Ошибка при оплате подписки", e);
+            return false;
+        } finally {
+            db.close();
+        }
+    }
+    public void checkAndUpdateOverdueSubscriptions() {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        try {
+            long currentTime = System.currentTimeMillis() / 1000;
+
+            String query = "UPDATE subscriptions " +
+                    "SET status_id = ?, updated_at = ? " +
+                    "WHERE renewal_date <= ? AND status_id = ?";
+
+            db.execSQL(query, new Object[]{
+                    StatusType.WAIT.getId(),
+                    currentTime,
+                    currentTime,
+                    StatusType.PAID.getId()
+            });
+
+            Log.d("SubscriptionRepository", "Проверка просроченных подписок выполнена");
+
+        } catch (Exception e) {
+            Log.e("SubscriptionRepository", "Ошибка при проверке просроченных подписок", e);
         } finally {
             db.close();
         }
