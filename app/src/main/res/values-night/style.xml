@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <resources>
     <style name="TextAppearance.App.Calendar" parent="TextAppearance.MaterialComponents.Subtitle2">
         <!-- Можно оставить пустым или задать общие параметры для всех элементов календаря -->
-    </style>
-    <style name="ShapeAppearanceOverlay.App.FAB.Rounded" parent="">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">28dp</item>
     </style>
     <style name="TextAppearance.App.Calendar.Header">
         <item name="android:textColor">?attr/colorOnSurface</item>

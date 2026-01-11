@@ -1,15 +1,18 @@
 package com.example.paymind.repositories;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.example.paymind.DBHelper;
+import com.example.paymind.NotificationScheduler;
 import com.example.paymind.enums.CategoryType;
 import com.example.paymind.enums.CurrencyType;
 import com.example.paymind.enums.PeriodType;
 import com.example.paymind.enums.StatusType;
+import com.example.paymind.models.Settings;
 import com.example.paymind.models.Subscription;
 
 import java.util.ArrayList;
@@ -18,12 +21,17 @@ import java.util.List;
 
 public class SubscriptionRepository {
     private final DBHelper dbHelper;
+    private final Context context;
+    private final SettingsRepository settingsRepository;
 
-    public SubscriptionRepository(DBHelper dbHelper) {
+    public SubscriptionRepository(Context context, DBHelper dbHelper) {
         this.dbHelper = dbHelper;
+        this.context = context.getApplicationContext();
+        this.settingsRepository = new SettingsRepository(dbHelper);
     }
 
     public List<Subscription> getAllSubscriptions() {
+        checkAndAutoRenewExpiredSubscriptions();
         checkAndUpdateOverdueSubscriptions();
 
         List<Subscription> subscriptions = new ArrayList<>();
@@ -73,6 +81,7 @@ public class SubscriptionRepository {
     }
 
     public List<Subscription> getSubscriptionsByCategory(int categoryId) {
+        checkAndAutoRenewExpiredSubscriptions();
         checkAndUpdateOverdueSubscriptions();
 
         List<Subscription> subscriptions = new ArrayList<>();
@@ -161,6 +170,11 @@ public class SubscriptionRepository {
 
         try {
             long result = db.insert("subscriptions", null, values);
+
+            if (result != -1) {
+                scheduleReminderIfNeeded(subscription, result);
+            }
+
             return result != -1;
         } catch (Exception e) {
             Log.e("SubscriptionRepository", "Ошибка при добавлении подписки", e);
@@ -189,12 +203,17 @@ public class SubscriptionRepository {
 
             values.put("renewal_date", nextRenewalDateMillis);
 
-            values.put("start_date", now);
+            values.put("start_date", now / 1000L);
 
             values.put("updated_at", System.currentTimeMillis());
 
             int rowsUpdated = db.update("subscriptions", values,
                     "id = ?", new String[]{String.valueOf(subscription.getId())});
+
+            if (rowsUpdated > 0) {
+                subscription.setRenewalDate(nextRenewalDateMillis);
+                scheduleReminderIfNeeded(subscription, subscription.getId());
+            }
 
             return rowsUpdated > 0;
 
@@ -229,5 +248,79 @@ public class SubscriptionRepository {
         } finally {
             db.close();
         }
+    }
+
+    private void scheduleReminderIfNeeded(Subscription subscription, long id) {
+
+        Settings settings = settingsRepository.getSettings();
+        if (settings == null || !settings.isPushNotificationsEnabled()) {
+            return;
+        }
+
+        long reminderTime =
+                subscription.getRenewalDate()
+                        - subscription.getReminderDaysBefore() * 24L * 60L * 60L;
+
+        long nowSec = System.currentTimeMillis() / 1000L;
+        if (reminderTime <= nowSec) {
+            return;
+        }
+
+        NotificationScheduler.scheduleReminder(
+                context,
+                reminderTime * 1000L,
+                "❗ Скоро списание",
+                "Не забудьте оплатить - " + subscription.getName(),
+                (int) id
+        );
+    }
+
+    public void checkAndAutoRenewExpiredSubscriptions() {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        try {
+            long currentTimeSeconds = System.currentTimeMillis() / 1000;
+
+            // Находим подписки, которые истекли И имеют автопродление
+            String query = "SELECT * FROM subscriptions " +
+                    "WHERE renewal_date <= ? " +
+                    "AND auto_renew = 1 " +
+                    "AND status_id != ?";  // Исключаем отмененные
+
+            Cursor cursor = db.rawQuery(query, new String[]{
+                    String.valueOf(currentTimeSeconds),
+                    String.valueOf(StatusType.PAID.getId())
+            });
+
+            while (cursor.moveToNext()) {
+                Subscription subscription = createSubscriptionFromCursor(cursor);
+                markAsPaid(subscription);
+            }
+
+            cursor.close();
+
+        } catch (Exception e) {
+            Log.e("SubscriptionRepository", "Ошибка при автопродлении", e);
+        }
+    }
+    private Subscription createSubscriptionFromCursor(Cursor cursor) {
+        Subscription subscription = new Subscription();
+
+        subscription.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
+        subscription.setName(cursor.getString(cursor.getColumnIndexOrThrow("name")));
+        subscription.setCategoryId(cursor.getInt(cursor.getColumnIndexOrThrow("category_id")));
+        subscription.setCost(cursor.getDouble(cursor.getColumnIndexOrThrow("cost")));
+        subscription.setCurrencyId(cursor.getInt(cursor.getColumnIndexOrThrow("currency_id")));
+        subscription.setStartDate(cursor.getLong(cursor.getColumnIndexOrThrow("start_date")));
+        subscription.setRenewalDate(cursor.getLong(cursor.getColumnIndexOrThrow("renewal_date")));
+        subscription.setPeriodTypeId(cursor.getInt(cursor.getColumnIndexOrThrow("period_type_id")));
+        subscription.setPeriodValue(cursor.getInt(cursor.getColumnIndexOrThrow("period_value")));
+        subscription.setAutoRenew(cursor.getInt(cursor.getColumnIndexOrThrow("auto_renew")) == 1);
+        subscription.setNotes(cursor.getString(cursor.getColumnIndexOrThrow("notes")));
+        subscription.setStatusId(cursor.getInt(cursor.getColumnIndexOrThrow("status_id")));
+        subscription.setReminderDaysBefore(cursor.getInt(cursor.getColumnIndexOrThrow("reminder_days_before")));
+        subscription.setTypeId(cursor.getInt(cursor.getColumnIndexOrThrow("type_id")));
+
+        return subscription;
     }
 }

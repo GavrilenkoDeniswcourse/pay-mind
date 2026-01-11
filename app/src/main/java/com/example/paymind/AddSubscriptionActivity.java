@@ -87,7 +87,7 @@ public class AddSubscriptionActivity extends AppCompatActivity {
         }
 
         dbHelper = new DBHelper(this);
-        subscriptionRepository = new SubscriptionRepository(dbHelper);
+        subscriptionRepository = new SubscriptionRepository(getApplicationContext(), dbHelper);
         subscriptionTypeRepository = new SubscriptionTypeRepository(dbHelper);
 
         initViews();
@@ -117,6 +117,14 @@ public class AddSubscriptionActivity extends AppCompatActivity {
 
         typeLabel = findViewById(R.id.type_label);
         typeSelect = findViewById(R.id.type_select);
+
+        TextInputLayout typeInputLayout = findViewById(R.id.type_select);
+
+        typeInputLayout.setEndIconOnClickListener(v -> {
+            showAddTypeDialog();
+        });
+
+        actvSubscriptionType.setOnClickListener(v -> actvSubscriptionType.showDropDown());
 
         if (categoryId != 0) {
             tvCategoryLabel.setVisibility(GONE);
@@ -400,6 +408,49 @@ public class AddSubscriptionActivity extends AppCompatActivity {
             }
         }
         return PeriodType.MONTH.getId();
+    }
+    private void showAddTypeDialog() {
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setTitle("Новый тип подписки");
+
+        final EditText input = new EditText(this);
+        input.setHint("Введите название (например, Игры)");
+        input.setPadding(50, 40, 50, 40);
+        builder.setView(input);
+
+        builder.setPositiveButton("ОК", (dialog, which) -> {
+            String newTypeName = input.getText().toString().trim();
+            if (!newTypeName.isEmpty()) {
+                saveNewSubscriptionType(newTypeName);
+            } else {
+                Toast.makeText(this, "Название не может быть пустым", Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.setNegativeButton("Отмена", (dialog, which) -> dialog.cancel());
+
+        builder.show();
+    }
+
+    private void saveNewSubscriptionType(String name) {
+        SubscriptionType newType = new SubscriptionType();
+        newType.setName(name);
+
+        long id = subscriptionTypeRepository.insertSubscriptionType(newType);
+
+        if (id > 0) {
+            subscriptionTypes = subscriptionTypeRepository.getAllSubscriptionTypes();
+            List<String> typeNames = new ArrayList<>();
+            for (SubscriptionType type : subscriptionTypes) {
+                typeNames.add(type.getName());
+            }
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                    this, android.R.layout.simple_dropdown_item_1line, typeNames);
+            actvSubscriptionType.setAdapter(adapter);
+
+            actvSubscriptionType.setText(name, false);
+            Toast.makeText(this, "Тип добавлен", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

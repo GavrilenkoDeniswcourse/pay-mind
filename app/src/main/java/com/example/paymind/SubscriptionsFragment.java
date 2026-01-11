@@ -46,7 +46,7 @@ public class SubscriptionsFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         dbHelper = new DBHelper(getContext());
-        subscriptionRepository = new SubscriptionRepository(dbHelper);
+        subscriptionRepository = new SubscriptionRepository(requireContext().getApplicationContext(), dbHelper);
 
         addSubscriptionLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),

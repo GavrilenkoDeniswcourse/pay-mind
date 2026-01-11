@@ -85,15 +85,14 @@
                 android:textSize="16sp" />
 
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:id="@+id/type_select"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
-                app:boxStrokeColor="?attr/colorOutline"
-                app:endIconMode="dropdown_menu"
-                app:endIconTint="?attr/colorPrimary"
-                app:hintTextColor="?attr/colorPrimary">
+                app:endIconMode="custom"
+                app:endIconDrawable="@drawable/outline_add_24"
+                app:endIconTint="?attr/colorPrimary">
 
                 <com.google.android.material.textfield.MaterialAutoCompleteTextView
                     android:id="@+id/spinnerSubscriptionType"

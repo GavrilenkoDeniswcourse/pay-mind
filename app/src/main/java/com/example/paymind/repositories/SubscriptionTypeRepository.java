@@ -1,5 +1,6 @@
 package com.example.paymind.repositories;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -38,5 +39,19 @@ public class SubscriptionTypeRepository {
         db.close();
 
         return subscriptionTypes;
+    }
+
+
+    public long insertSubscriptionType(SubscriptionType type) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase(); // Используем Writable для записи
+
+        ContentValues values = new ContentValues();
+        values.put("name", type.getName());
+
+        // Метод insert возвращает ID новой строки или -1, если произошла ошибка
+        long newId = db.insert("subscription_types", null, values);
+
+        db.close();
+        return newId;
     }
 }

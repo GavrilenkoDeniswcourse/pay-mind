@@ -2,6 +2,10 @@ package com.example.paymind;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,8 +24,14 @@ import androidx.fragment.app.Fragment;
 import com.example.paymind.models.Subscription;
 import com.example.paymind.repositories.SubscriptionRepository;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.DayViewDecorator;
+import com.prolificinteractive.materialcalendarview.DayViewFacade;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -35,13 +45,17 @@ public class HomeFragment extends Fragment {
     private TextView remindersCountView;
     private FloatingActionButton fabAddSubscription;
     private ActivityResultLauncher<Intent> addSubscriptionLauncher;
+    private MaterialCalendarView calendarView;
+
+    private List<Long> paymentDates = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         dbHelper = new DBHelper(getContext());
-        subscriptionRepository = new SubscriptionRepository(dbHelper);
+        subscriptionRepository = new SubscriptionRepository(requireContext().getApplicationContext(), dbHelper);
+
 
         addSubscriptionLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -63,6 +77,7 @@ public class HomeFragment extends Fragment {
         totalAmountView = view.findViewById(R.id.total_amount);
         remindersCountView = view.findViewById(R.id.reminders_count);
         fabAddSubscription = view.findViewById(R.id.fabAddSubscription);
+        calendarView = view.findViewById(R.id.calendar_placeholder);
 
         refreshSubscriptionsList();
 
@@ -70,7 +85,7 @@ public class HomeFragment extends Fragment {
             Intent intent = new Intent(getActivity(), AddSubscriptionActivity.class);
             addSubscriptionLauncher.launch(intent);
         });
-
+        markPaymentDatesOnCalendar();
         return view;
     }
 
@@ -85,7 +100,7 @@ public class HomeFragment extends Fragment {
 
         for (int i = 0; i < remindersCount; i++) {
             Subscription subscription = allSubscriptions.get(i);
-
+            paymentDates.add(subscription.getRenewalDate() * 1000L);
             totalAmount += (int) subscription.getCost();
 
             View cardView = createSubscriptionCard(subscription);
@@ -162,5 +177,52 @@ public class HomeFragment extends Fragment {
                 return count + " напоминаний";
         }
     }
+    private void markPaymentDatesOnCalendar() {
+        calendarView.addDecorator(new DayViewDecorator() {
+            @Override
+            public boolean shouldDecorate(CalendarDay day) {
+                return isPaymentDate(day);
+            }
 
+            @Override
+            public void decorate(DayViewFacade view) {
+                view.setBackgroundDrawable(createRedCircleDrawable());
+            }
+        });
+    }
+
+    private boolean isPaymentDate(CalendarDay calendarDay) {
+        for (Long paymentDate : paymentDates) {
+            Calendar paymentCalendar = Calendar.getInstance();
+            paymentCalendar.setTimeInMillis(paymentDate);
+
+            CalendarDay paymentCalendarDay = CalendarDay.from(
+                    paymentCalendar.get(Calendar.YEAR),
+                    paymentCalendar.get(Calendar.MONTH) + 1,
+                    paymentCalendar.get(Calendar.DAY_OF_MONTH)
+            );
+
+            if (paymentCalendarDay.equals(calendarDay)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private Drawable createRedCircleDrawable() {
+        GradientDrawable drawable = new GradientDrawable();
+        drawable.setShape(GradientDrawable.OVAL);
+        
+        int nightModeFlags = getContext().getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+
+        if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
+            drawable.setColor(Color.parseColor("#1A2B8F"));
+            drawable.setStroke(3, Color.parseColor("#4D69FF"));
+        } else {
+            drawable.setColor(Color.parseColor("#E8EBFD"));
+            drawable.setStroke(3, Color.parseColor("#203EFF"));
+        }
+
+        return drawable;
+    }
 }
